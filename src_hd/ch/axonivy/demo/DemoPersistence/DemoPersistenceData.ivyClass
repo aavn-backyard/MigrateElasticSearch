@@ -1,0 +1,6 @@
+DemoPersistenceData #class
+ch.axonivy.demo.DemoPersistence #namespace
+dossier ch.axonivy.demo.Dossier #field
+dossier PERSISTENT #fieldModifier
+results java.util.List<ch.axonivy.demo.DossierResult> #field
+results PERSISTENT #fieldModifier

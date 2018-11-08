@@ -1,0 +1,102 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:ic="http://ivyteam.ch/jsf/component"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:pm="http://primefaces.org/mobile">
+<h:body>
+	<ui:composition template="/layouts/basic.xhtml">
+		<ui:define name="title">DemoPersistence</ui:define>
+		<ui:define name="content">
+		<style>
+			table tr td, table tr th {
+				border: 1px solid #cdcdcd;
+			}
+			a:hover{
+				cursor:pointer;
+			}
+		</style>	
+		<script>
+			function beautifyJS(contentID){
+				try{
+					var object = JSON.parse($("span[class*="+contentID+"]").text());
+					console.log(object);
+					$("span[class*="+contentID+"]").text(JSON.stringify(object, null, 4));
+					}
+				catch(err) {
+				   alert("Oop!! JSON has synctax error. Can not beautify it.")
+				}
+			}
+			
+			function deleteDossier(dossierTechnicalId, dossierEmail){
+				var id = "";
+				if(dossierTechnicalId != "" ){
+					id = dossierTechnicalId;
+				} else if(dossierEmail != "N/A" ){
+					id = dossierEmail;
+				}
+				$("[id*='idToDelete']").val(id);
+				$("[id*='btnDelete']").trigger("click");
+			}
+		</script>
+			<h:form id="form">
+				<h:panelGrid columns="2">
+					<f:facet name="header">
+						<p:messages></p:messages>
+					</f:facet>
+					<br />
+					<p:outputPanel>
+						<p:commandButton actionListener="#{logic.save}" value="Save random Dossier" update="@form, dossierPanel"  icon="ui-icon-check" />
+						<p:commandButton actionListener="#{logic.cleanDossier}" value="Clean All Dossier" update="dossierPanel"  icon="ui-icon-close" />
+						<p:commandButton actionListener="#{logic.refresh}" value="Refresh" update="dossierPanel"  icon="ui-icon-search" />
+					</p:outputPanel>
+					
+				</h:panelGrid>
+				<!--<p:outputLabel value="Delete dossier via email"></p:outputLabel>
+				 <h:panelGrid columns="2">
+					<p:outputPanel>
+						<p:inputText id="idToDelete" style="width:250px" placeholder="email/dossierId/technicalId to delete" value="#{data.emailOrId}"></p:inputText>
+						<p:commandButton id="btnDelete" actionListener="#{logic.deleteByEmail}" value="Delete this Dossier" update="@form, dossierPanel"  icon="ui-icon-check" />
+					</p:outputPanel>
+				</h:panelGrid> -->
+				<hr/>
+				<p:outputPanel id="dossierPanel">
+				
+				<h:outputText value="All Dossiers from persistence:"></h:outputText>
+				<table>
+					<THEAD >
+						<TR > 
+							<TH >Index</TH>
+							<TH >Content</TH>
+						</TR>
+					</THEAD>
+					<TBODY>
+						<ui:repeat var="dossier" value="#{data.results}" varStatus="index">
+							<TR>
+								<TD style="width:10%"><h:outputText value="#{index.index}"></h:outputText></TD>
+								<TD ><div style="max-height: 450px; overflow:auto; min-width:1000px">
+										<div>
+											<a onclick="beautifyJS('detailt_#{index.index}'); return false;" >Beautify it!!!</a>
+										</div>
+										<div id="detailt_#{index.index}">
+											<pre style="color:#c7254e; text-align:left">
+												<code>
+													<h:outputText styleClass="detailt_#{index.index}" escape="false" value="#{dossier.detail}"></h:outputText>
+												</code>
+											</pre>
+										</div>
+									</div>
+								</TD>
+							</TR>
+						</ui:repeat>
+					</TBODY>
+				</table>
+				</p:outputPanel>
+			</h:form>
+			
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

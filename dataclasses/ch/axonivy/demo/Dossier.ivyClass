@@ -1,0 +1,4 @@
+Dossier #class
+ch.axonivy.demo #namespace
+person ch.axonivy.demo.Person #field
+person PERSISTENT #fieldModifier
